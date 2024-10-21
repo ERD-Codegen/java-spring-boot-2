@@ -16,6 +16,7 @@ import java.util.Set;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Table(name = "articles")
@@ -27,9 +28,22 @@ public class Article {
     @Id
     private Long id;
 
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String body;
+
+    @Column(nullable = false)
+    private String status;
+
     @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(fetch = EAGER)
     private User author;
+
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = LAZY)
+    private Category category;
 
     @Embedded
     private ArticleContents contents;
@@ -91,6 +105,17 @@ public class Article {
 
     public void updateArticle(ArticleUpdateRequest updateRequest) {
         contents.updateArticleContentsIfPresent(updateRequest);
+        // Update title and body if present in the update request
+        if (updateRequest.getTitle() != null) {
+            this.title = updateRequest.getTitle();
+        }
+        if (updateRequest.getBody() != null) {
+            this.body = updateRequest.getBody();
+        }
+        // Update status if present in the update request
+        if (updateRequest.getStatus() != null) {
+            this.status = updateRequest.getStatus();
+        }
     }
 
     public Article updateFavoriteByUser(User user) {
@@ -114,12 +139,28 @@ public class Article {
         return updatedAt;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
     public int getFavoritedCount() {
         return userFavorited.size();
     }
 
     public boolean isFavorited() {
         return favorited;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public Set<Comment> getComments() {

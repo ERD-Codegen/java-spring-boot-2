@@ -23,12 +23,23 @@ CREATE TABLE IF NOT EXISTS articles
     author_id   BIGINT       NOT NULL,
     title       VARCHAR(255) NOT NULL,
     slug        VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    body        VARCHAR      NOT NULL,
+    description VARCHAR(255), -- Kept from the current code, nullable as it might not be used in new code
+    body        TEXT         NOT NULL, -- Changed from VARCHAR to TEXT to accommodate larger content
+    status      VARCHAR(50)  NOT NULL, -- Added from new code
+    user_id     BIGINT, -- Added from new code
+    category_id BIGINT, -- Added from new code
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES users (id),
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id), -- Added from new code
+    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories (id), -- Added from new code
     CONSTRAINT unique_author_slug UNIQUE (author_id, slug)
+);
+
+CREATE TABLE IF NOT EXISTS categories
+(
+    id    BIGSERIAL PRIMARY KEY,
+    name  VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tags
@@ -52,7 +63,7 @@ CREATE TABLE IF NOT EXISTS article_favorites
     user_id BIGINT NOT NULL,
     PRIMARY KEY (article_id, user_id),
     CONSTRAINT fk_article_favorited FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE,
-    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    CONSTRAINT fk_user_favorites FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE -- Renamed constraint to avoid conflict with fk_user in articles table
 );
 
 CREATE TABLE IF NOT EXISTS comments
@@ -60,7 +71,7 @@ CREATE TABLE IF NOT EXISTS comments
     id          BIGSERIAL PRIMARY KEY,
     author_id   BIGINT       NOT NULL,
     article_id  BIGINT       NOT NULL,
-    body        VARCHAR      NOT NULL,
+    body        VARCHAR(1024) NOT NULL, -- Changed VARCHAR to VARCHAR(1024) to specify a length
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_comment_author FOREIGN KEY (author_id) REFERENCES users (id) ON DELETE CASCADE,

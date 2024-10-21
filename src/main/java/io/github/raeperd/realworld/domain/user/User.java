@@ -12,6 +12,9 @@ import java.util.Objects;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
+import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.ColumnTransformer;
+
 import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -21,7 +24,16 @@ public class User {
 
     @GeneratedValue(strategy = IDENTITY)
     @Id
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
+
+    @NotNull
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+
+    @Column(name = "password_hash", nullable = false)
+    @ColumnTransformer(write = "crypt(?, gen_salt('bf'))")
+    private String passwordHash;
 
     @Embedded
     private Email email;
@@ -37,6 +49,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "followee_id", referencedColumnName = "id"))
     @OneToMany(cascade = REMOVE)
     private Set<User> followingUsers = new HashSet<>();
+
+    @Column(name = "role", nullable = false)
+    private String role;
 
     @ManyToMany(mappedBy = "userFavorited")
     private Set<Article> articleFavorited = new HashSet<>();
