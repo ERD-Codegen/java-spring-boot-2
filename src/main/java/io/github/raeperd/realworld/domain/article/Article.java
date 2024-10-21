@@ -1,6 +1,7 @@
 package io.github.raeperd.realworld.domain.article;
 
 import io.github.raeperd.realworld.domain.article.comment.Comment;
+import io.github.raeperd.realworld.domain.category.Category;
 import io.github.raeperd.realworld.domain.user.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -24,12 +25,26 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Article {
 
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
     @Id
     private Long id;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "body", nullable = false, columnDefinition = "TEXT")
+    private String body;
+
+    @Column(name = "status", nullable = false)
+    private String status;
 
     @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(fetch = EAGER)
     private User author;
+
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = EAGER)
+    private Category category;
 
     @Embedded
     private ArticleContents contents;
@@ -57,6 +72,8 @@ public class Article {
     public Article(User author, ArticleContents contents) {
         this.author = author;
         this.contents = contents;
+        this.title = contents.getTitle();
+        this.body = contents.getBody();
     }
 
     protected Article() {

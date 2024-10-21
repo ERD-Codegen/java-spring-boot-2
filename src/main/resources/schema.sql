@@ -66,3 +66,11 @@ CREATE TABLE IF NOT EXISTS comments
     CONSTRAINT fk_comment_author FOREIGN KEY (author_id) REFERENCES users (id) ON DELETE CASCADE,
     CONSTRAINT fk_comment_article FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS categories
+(
+    id          BIGSERIAL PRIMARY KEY,
+    created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    name        VARCHAR(255) NOT NULL
+);
