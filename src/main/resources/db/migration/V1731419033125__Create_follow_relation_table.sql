@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS `1234567890123456789012345678901abcd` (
+  `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+  `followee_id` BIGINT NOT NULL,
+  `follower_id` BIGINT NOT NULL,
+  FOREIGN KEY (`followee_id`) REFERENCES `users`(`id`),
+  FOREIGN KEY (`follower_id`) REFERENCES `users`(`id`)
+);
