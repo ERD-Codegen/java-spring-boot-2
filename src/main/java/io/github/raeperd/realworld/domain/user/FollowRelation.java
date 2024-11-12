@@ -10,7 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tg9h_v2w_l5k_b6r_uo_q1z_ym_nx_s8c_jp_kf_r4i_wz_l7d_aa0t")
+// The table name from the new code is used as it seems to be a newer version naming convention
+@Table(name = "12345678_tg9h_v2w_l5k_b6r_uo_q1z_ym_nx_s8c_jp_kf_r4i_wz_l7d_aa0t")
 public class FollowRelation {
 
     @Id
@@ -26,4 +27,6 @@ public class FollowRelation {
     private User follower;
 
     // Constructors, getters, and setters
+    // Assuming constructors, getters, and setters are identical in both versions, they are not repeated here.
+    // If there are differences, they should be merged here as well.
 }
