@@ -1,9 +1,16 @@
 package io.github.raeperd.realworld.domain.user;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "1234567890123456789012345678901abcd")
+@Table(name = "tg9h_v2w_l5k_b6r_uo_q1z_ym_nx_s8c_jp_kf_r4i_wz_l7d_aa0t")
 public class FollowRelation {
 
     @Id
